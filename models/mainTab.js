@@ -1,8 +1,8 @@
 const db = require("../db");
 const { BadRequestError } = require("../utils/errors");
 
-class Note {
+class MainTab {
 
 }
 
-module.exports = Note;
+module.exports = MainTab;
