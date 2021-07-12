@@ -5,11 +5,11 @@ const { PORT } = require("./config");
 const { NotFoundError } = require("./utils/errors");
 const security = require("./middleware/security");
 const authRoutes = require("./routes/auth");
-const maintabsRoutes = require("./routes/mainTabs");
-const subtabsRoutes = require("./routes/subtabs");
-const tasksRoutes = require("./routes/tasks");
-const notesRoutes = require("./routes/notes");
-const calendarsRoutes = require("./routes/calendars");
+// const maintabsRoutes = require("./routes/mainTabs");
+// const subtabsRoutes = require("./routes/subtabs");
+// const tasksRoutes = require("./routes/tasks");
+// const notesRoutes = require("./routes/notes");
+// const calendarsRoutes = require("./routes/calendars");
 
 const app = express();
 
@@ -23,11 +23,11 @@ app.use(morgan("tiny"));
 app.use(security.extractUserFromJwt);
 
 app.use("/auth", authRoutes);
-app.use("/maintabs", maintabsRoutes);
-app.use("/subtabs", subtabsRoutes);
-app.use("/tasks", tasksRoutes);
-app.use("/notes", notesRoutes);
-app.use("/calendar", calendarsRoutes);
+// app.use("/maintabs", maintabsRoutes);
+// app.use("/subtabs", subtabsRoutes);
+// app.use("/tasks", tasksRoutes);
+// app.use("/notes", notesRoutes);
+// app.use("/calendar", calendarsRoutes);
 
 
 /** Handle 404 errors -- this matches everything */

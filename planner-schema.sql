@@ -4,7 +4,7 @@ CREATE TABLE users (
     password    TEXT NOT NULL,
     first_name  VARCHAR(50) NOT NULL,
     last_name   VARCHAR(50) NOT NULL,
-    is_admin    BOOLEAN NOT NULL,
+    is_admin    BOOLEAN NOT NULL DEFAULT FALSE,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
