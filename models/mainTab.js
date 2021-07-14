@@ -44,7 +44,7 @@ class MainTab {
         const query = `
             INSERT INTO main_tabs (user_id, name)
             VALUES ((SELECT id FROM users WHERE email=$1), $2) 
-            RETURNING user_id, name;            
+            RETURNING id, user_id, name, created_at;            
         `
         const result = await db.query(query, [user.email, maintab.name]);
 
