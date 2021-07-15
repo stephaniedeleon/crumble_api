@@ -27,7 +27,7 @@ class MainTab {
         const result = await db.query(query, [maintabId, user.email]);
 
         //return maintab
-        return result.rows;
+        return result.rows[0];
     }
 
     /** Creating a new maintab */
