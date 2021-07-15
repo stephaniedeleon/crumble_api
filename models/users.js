@@ -30,7 +30,7 @@ class User {
             }
         }
 
-        throw new UnauthorizedError('Invalid email/password');
+        throw new UnauthorizedError('Invalid Email or Password');
     }
 
     static async register(credentials) {
@@ -40,6 +40,9 @@ class User {
                 throw new BadRequestError(`Missing ${field} in request body.`);
             }
         })
+
+        if (credentials.firstName.trim() === "" || credentials.lastName.trim() === "")
+            throw new BadRequestError(`Invalid first or last name.`)
 
         if (credentials.email.indexOf('@') <= 0) {
             throw new BadRequestError('Invalid email.');
