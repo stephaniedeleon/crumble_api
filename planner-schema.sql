@@ -18,8 +18,9 @@ CREATE TABLE main_tabs (
 
 CREATE TABLE subtabs (
     id          SERIAL PRIMARY KEY,
-    main_id     INTEGER,
-    sub_id      INTEGER,
+    main_id     INTEGER DEFAULT NULL,
+    sub_id      INTEGER DEFAULT NULL,
+    name        VARCHAR(30) NOT NULL,
     created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY (main_id) REFERENCES main_tabs(id) ON DELETE CASCADE,
     FOREIGN KEY (sub_id) REFERENCES subtabs(id)
