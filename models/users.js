@@ -45,8 +45,11 @@ class User {
             throw new BadRequestError(`Invalid first or last name.`)
 
         if (credentials.email.indexOf('@') <= 0) {
-            throw new BadRequestError('Invalid email.');
+            throw new BadRequestError('Invalid Email.');
         }
+
+        if (credentials.password.trim() === "")
+            throw new BadRequestError('Invalid Password')
 
         const existingUser = await User.fetchUserByEmail(credentials.email);
         if (existingUser) {
