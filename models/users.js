@@ -30,7 +30,7 @@ class User {
             }
         }
 
-        throw new UnauthorizedError('Invalid email/password');
+        throw new UnauthorizedError('Invalid Email or Password');
     }
 
     static async register(credentials) {
@@ -41,9 +41,15 @@ class User {
             }
         })
 
+        if (credentials.firstName.trim() === "" || credentials.lastName.trim() === "")
+            throw new BadRequestError(`Invalid first or last name.`)
+
         if (credentials.email.indexOf('@') <= 0) {
-            throw new BadRequestError('Invalid email.');
+            throw new BadRequestError('Invalid Email.');
         }
+
+        if (credentials.password.trim() === "")
+            throw new BadRequestError('Invalid Password')
 
         const existingUser = await User.fetchUserByEmail(credentials.email);
         if (existingUser) {
