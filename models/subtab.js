@@ -36,7 +36,6 @@ class Subtab {
     /** Creating a subtab from maintab */
     static async createSubtabFromMain({ main_id, subtab }) {
         const requiredFields = ["name"];
-        console.log(subtab);
         requiredFields.forEach((field) => {
             if (!subtab.hasOwnProperty(field) || !subtab[field]) {
                 throw new BadRequestError(`Required field - ${field} - missing from request body.`)
@@ -87,6 +86,57 @@ class Subtab {
         const result = await db.query(query, [id]);
 
         return result.rows;
+    }
+
+    /** Return object containing directory tree data */
+    static async getDirectoryData(maintabId, user) {
+
+        let currentId = 1;
+        const query = `
+            SELECT * FROM main_tabs
+            WHERE main_tabs.id = $1 AND main_tabs.user_id = (SELECT id FROM users WHERE email=$2);
+        `
+        const result = await db.query(query, [maintabId, user.email]);
+        const maintab = result.rows[0];
+        const primarySubtabs = await this.listSubtabsByMain(maintabId);
+
+
+        const children = await Promise.all(
+            primarySubtabs.map(async (element) => ({
+                id: currentId++,
+                name: element.name,
+                children: await (this.getChildren(element.id, currentId))
+            }))
+        ) 
+
+        let data = {
+            id: 'root',
+            name: maintab.name,
+            children: children
+        }
+
+        return data;
+    }
+
+    // Recursivaly returns an array of all children subtabs associated to the subtabId
+    static async getChildren(subtabId, currentId) {
+
+        const subtabs = await (this.listSubtabsBySubtab(subtabId))
+        if (!subtabs.length) {
+            return;
+        }
+
+        const children = await Promise.all(
+
+            subtabs.map(async (element) => ({
+                id: currentId++,
+                name: element.name,
+                children: await (this.getChildren(element.id, currentId))
+            }))
+        )
+
+        return children;
+
     }
 }
 
