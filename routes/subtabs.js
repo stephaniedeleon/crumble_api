@@ -69,5 +69,19 @@ router.delete("/:subtabId", requireAuthenticatedUser, async (req, res, next) => 
 });
 
 
+/** Return object containing directory tree data */
+router.get("/:maintabId/directory", requireAuthenticatedUser, async (req, res, next) => {
+
+    try {
+        const user = res.locals.user;
+        const maintabId = req.params.maintabId;
+        const directoryData = await Subtab.getDirectoryData(maintabId, user);
+        res.status(200).json({ directoryData });
+
+    } catch (err) {
+        next(err);
+    }
+});
+
 
 module.exports = router;
