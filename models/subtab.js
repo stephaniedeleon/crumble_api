@@ -9,7 +9,7 @@ class Subtab {
         const query = `
             SELECT * FROM subtabs
             WHERE subtabs.main_id = $1
-            ORDER BY name ASC;
+            ORDER BY created_at DESC;
         `
     
         const result = await db.query(query, [main_id]);
@@ -24,7 +24,7 @@ class Subtab {
         const query =  `
             SELECT * FROM subtabs
             WHERE subtabs.sub_id = $1
-            ORDER BY name DESC;
+            ORDER BY created_at DESC;
         `
 
         const result = await db.query(query, [sub_id]);
@@ -101,9 +101,9 @@ class Subtab {
 
 
         const children = await Promise.all(
-            primarySubtabs.map(async (element) => ({
+            primarySubtabs.map(async (element) => this.createTreeNode({
+                tabObject: element,
                 id: element.id,
-                name: element.name,
                 children: await (this.getChildren(element.id))
             }))
         ) 
@@ -124,9 +124,9 @@ class Subtab {
 
         const children = await Promise.all(
 
-            subtabs.map(async (element) => ({
+            subtabs.map(async (element) => this.createTreeNode({
+                tabObject: element,
                 id: element.id,
-                name: element.name,
                 children: await (this.getChildren(element.id, currentId))
             }))
         )
@@ -138,7 +138,7 @@ class Subtab {
     /** args: { tabObject, id (optional), childrenArray (optional) } */
     static createTreeNode(args) {
         try {
-            
+
             if ('id' in args) {
                 if ('childrenArray' in args) {
                     return new TreeNode(args.tabObject, args.id, args.childrenArray)
