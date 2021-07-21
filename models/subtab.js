@@ -9,7 +9,7 @@ class Subtab {
         const query = `
             SELECT * FROM subtabs
             WHERE subtabs.main_id = $1
-            ORDER BY name DESC;
+            ORDER BY name ASC;
         `
     
         const result = await db.query(query, [main_id]);
@@ -91,7 +91,6 @@ class Subtab {
     /** Return object containing directory tree data */
     static async getDirectoryData(maintabId, user) {
 
-        let currentId = 1;
         const query = `
             SELECT * FROM main_tabs
             WHERE main_tabs.id = $1 AND main_tabs.user_id = (SELECT id FROM users WHERE email=$2);
@@ -103,9 +102,9 @@ class Subtab {
 
         const children = await Promise.all(
             primarySubtabs.map(async (element) => ({
-                id: currentId++,
+                id: element.id,
                 name: element.name,
-                children: await (this.getChildren(element.id, currentId))
+                children: await (this.getChildren(element.id))
             }))
         ) 
 
@@ -119,7 +118,7 @@ class Subtab {
     }
 
     // Recursivaly returns an array of all children subtabs associated to the subtabId
-    static async getChildren(subtabId, currentId) {
+    static async getChildren(subtabId) {
 
         const subtabs = await (this.listSubtabsBySubtab(subtabId))
         if (!subtabs.length) {
@@ -129,7 +128,7 @@ class Subtab {
         const children = await Promise.all(
 
             subtabs.map(async (element) => ({
-                id: currentId++,
+                id: element.id,
                 name: element.name,
                 children: await (this.getChildren(element.id, currentId))
             }))
