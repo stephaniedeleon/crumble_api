@@ -108,13 +108,10 @@ class Subtab {
             }))
         ) 
 
-        let data = {
-            id: 'root',
-            name: maintab.name,
-            children: children
-        }
 
-        return data;
+        let data = this.createTreeNode({ tabObject: maintab, id: 'root', childrenArray: children })
+        return data.getData();
+ 
     }
 
     // Recursivaly returns an array of all children subtabs associated to the subtabId
@@ -137,6 +134,47 @@ class Subtab {
         return children;
 
     }
+
+    /** args: { tabObject, id (optional), childrenArray (optional) } */
+    static createTreeNode(args) {
+        try {
+            
+            if ('id' in args) {
+                if ('childrenArray' in args) {
+                    return new TreeNode(args.tabObject, args.id, args.childrenArray)
+                }
+        
+                return new TreeNode(args.tabObject, args.id, [])
+            }
+        
+            return new TreeNode(args.tabObject, args.tabObject.id, [])
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
+}
+
+
+class TreeNode {
+
+    constructor(tabObject, id, childrenArray) {
+        this.id = id
+        this.name = tabObject.name
+        this.children = childrenArray
+
+        this.data = {
+            id: this.id,
+            name: this.name,
+            children: this.children
+        }
+    }
+
+    getData () {
+        return this.data;
+    }
+
 }
 
 module.exports = Subtab;
