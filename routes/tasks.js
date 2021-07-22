@@ -73,8 +73,7 @@ router.put("/mark/:taskId", requireAuthenticatedUser, async (req, res, next) => 
     try {
         const taskId = req.params.taskId;
         const task = await Task.markTask(taskId);
-        res.status(204).json({ task });
-
+        res.status(201).json({ task });
     } catch(err) {
         next(err);
     }
@@ -86,7 +85,7 @@ router.put("/unmark/:taskId", requireAuthenticatedUser, async (req, res, next) =
     try {
         const taskId = req.params.taskId;
         const task = await Task.unmarkTask(taskId);
-        res.status(204).json({ task });
+        res.status(201).json({ task });
 
     } catch(err) {
         next(err);
