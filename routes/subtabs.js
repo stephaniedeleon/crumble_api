@@ -76,7 +76,6 @@ router.get("/:maintabId/directory", requireAuthenticatedUser, async (req, res, n
         const user = res.locals.user;
         const maintabId = req.params.maintabId;
         const directoryData = await Subtab.getDirectoryData(maintabId, user);
-        // console.log(directoryData)
         res.status(200).json({ directoryData });
 
     } catch (err) {
