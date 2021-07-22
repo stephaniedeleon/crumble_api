@@ -73,7 +73,7 @@ router.put("/mark/:subtabId", requireAuthenticatedUser, async (req, res, next) =
     try {
         const subtabId = req.params.subtabId;
         const subtab = await Subtab.markSubtab(subtabId);
-        res.status(204).json({ subtab });
+        res.status(201).json({ subtab });
 
     } catch(err) {
         next(err);
@@ -86,7 +86,7 @@ router.put("/unmark/:subtabId", requireAuthenticatedUser, async (req, res, next)
     try {
         const subtabId = req.params.subtabId;
         const subtab = await Subtab.unmarkSubtab(subtabId);
-        res.status(204).json({ subtab });
+        res.status(201).json({ subtab });
 
     } catch(err) {
         next(err);
