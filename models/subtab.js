@@ -147,7 +147,7 @@ static async unmarkSubtab(id) {
   static async getChildren(subtabId) {
     const subtabs = await this.listSubtabsBySubtab(subtabId);
     if (!subtabs.length) {
-      return;
+      return [];
     }
 
     const children = await Promise.all(
@@ -166,15 +166,16 @@ static async unmarkSubtab(id) {
   static createTreeNode(args) {
     try {
       if ("id" in args) {
-        if ("children" in args && args.children !== undefined) {
+        if ("children" in args && args.children !== []) {
           return new TreeNode(args.tabObject, args.id, args.children);
         }
 
-        return new TreeNode(args.tabObject, args.id, undefined);
+        return new TreeNode(args.tabObject, args.id, []);
+        
       } else if ("children" in args) {
         return new TreeNode(args.tabObject, args.tabObject.id, args.children);
       }
-      return new TreeNode(args.tabObject, args.tabObject.id, undefined);
+      return new TreeNode(args.tabObject, args.tabObject.id, []);
     } catch (err) {
       console.log(err);
     }
