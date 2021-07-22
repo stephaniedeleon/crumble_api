@@ -90,7 +90,7 @@ class Subtab {
 
     /** Return object containing directory tree data */
     static async getDirectoryData(maintabId, user) {
-
+        
         const query = `
             SELECT * FROM main_tabs
             WHERE main_tabs.id = $1 AND main_tabs.user_id = (SELECT id FROM users WHERE email=$2);
@@ -113,6 +113,8 @@ class Subtab {
             name: maintab.name,
             children: children
         }
+
+        console.log(data);
 
         return data;
     }
