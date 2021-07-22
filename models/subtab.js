@@ -44,7 +44,7 @@ class Subtab {
     const query = `
             INSERT INTO subtabs (main_id, name)
             VALUES ($1, $2)
-            RETURNING id, main_id, name, created_at;
+            RETURNING id, main_id, name, completed, created_at;
         `;
 
     const result = await db.query(query, [main_id, subtab.name]);
@@ -67,7 +67,7 @@ class Subtab {
     const query = `
             INSERT INTO subtabs (sub_id, name)
             VALUES ($1, $2)
-            RETURNING id, sub_id, name, created_at;
+            RETURNING id, sub_id, name, completed, created_at;
         `;
 
     const result = await db.query(query, [sub_id, subtab.name]);
@@ -87,6 +87,34 @@ class Subtab {
 
     return result.rows;
   }
+
+/** Mark subtab */
+static async markSubtab(id) {
+    const query = `
+        UPDATE subtabs
+        SET completed = TRUE
+        WHERE id = $1
+    `
+
+    const result = await db.query(query, [id]);
+
+    // return subtab
+    return result.rows[0];
+}
+
+/** Unmark subtab */
+static async unmarkSubtab(id) {
+    const query = `
+        UPDATE subtabs
+        SET completed = FALSE
+        WHERE id = $1
+    `
+
+    const result = await db.query(query, [id]);
+
+    // return subtab
+    return result.rows[0];
+}
 
   /** Return object containing directory tree data */
   static async getDirectoryData(maintabId, user) {

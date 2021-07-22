@@ -7,7 +7,7 @@ const security = require("./middleware/security");
 const authRoutes = require("./routes/auth");
 const maintabsRoutes = require("./routes/mainTabs");
 const subtabsRoutes = require("./routes/subtabs");
-// const tasksRoutes = require("./routes/tasks");
+const tasksRoutes = require("./routes/tasks");
 // const notesRoutes = require("./routes/notes");
 // const calendarsRoutes = require("./routes/calendars");
 
@@ -25,7 +25,7 @@ app.use(security.extractUserFromJwt);
 app.use("/auth", authRoutes);
 app.use("/maintabs", maintabsRoutes);
 app.use("/subtabs", subtabsRoutes);
-// app.use("/tasks", tasksRoutes);
+app.use("/tasks", tasksRoutes);
 // app.use("/notes", notesRoutes);
 // app.use("/calendar", calendarsRoutes);
 
