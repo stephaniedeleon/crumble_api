@@ -7,7 +7,6 @@ const Subtab = require("../models/subtab");
 router.get("/main/:id", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
-        const user = res.locals.user;
         const maintabId = req.params.id;
         const subtabs = await Subtab.listSubtabsByMain(maintabId);
         res.status(200).json({ subtabs });
@@ -61,6 +60,32 @@ router.delete("/:subtabId", requireAuthenticatedUser, async (req, res, next) => 
     try {
         const subtabId = req.params.subtabId; 
         const subtab = await Subtab.deleteSubtab(subtabId);
+        res.status(201).json({ subtab });
+
+    } catch(err) {
+        next(err);
+    }
+});
+
+/** Marking a subtab */
+router.put("/mark/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
+    
+    try {
+        const subtabId = req.params.subtabId;
+        const subtab = await Subtab.markSubtab(subtabId);
+        res.status(201).json({ subtab });
+
+    } catch(err) {
+        next(err);
+    }
+});
+
+/** Unmarking a subtab */
+router.put("/unmark/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
+    
+    try {
+        const subtabId = req.params.subtabId;
+        const subtab = await Subtab.unmarkSubtab(subtabId);
         res.status(201).json({ subtab });
 
     } catch(err) {
