@@ -65,9 +65,9 @@ class Task {
         });
 
         const query = `
-                INSERT INTO subtabs (sub_id, details)
+                INSERT INTO tasks (sub_id, details)
                 VALUES ($1, $2)
-                RETURNING id, sub_id, name, completed, created_at;
+                RETURNING id, sub_id, details, completed, created_at;
             `;
 
         const result = await db.query(query, [sub_id, task.details]);
