@@ -40,19 +40,23 @@ CREATE TABLE tasks (
 
 
 CREATE TABLE notes (
-    id          SERIAL PRIMARY KEY,
-    sub_id      INTEGER NOT NULL,
-    title       VARCHAR(20) NOT NULL,
-    details     TEXT NOT NULL,
-    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (sub_id) REFERENCES subtabs(id) ON DELETE CASCADE
+    id              SERIAL PRIMARY KEY,
+    main_id         INTEGER DEFAULT NULL,
+    sub_id          INTEGER DEFAULT NULL,
+    title           VARCHAR(20) NOT NULL,
+    details         TEXT NOT NULL,
+    created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY     (main_id) REFERENCES main_tabs(id) ON DELETE CASCADE,
+    FOREIGN KEY     (sub_id) REFERENCES subtabs(id) ON DELETE CASCADE
 );
 
 CREATE TABLE calendar (
-    id          SERIAL PRIMARY KEY,
-    sub_id      INTEGER NOT NULL,
-    event       VARCHAR(20) NOT NULL,
-    date        TIMESTAMP NOT NULL,
-    created_at  TIMESTAMP NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (sub_id) REFERENCES subtabs(id) ON DELETE CASCADE
+    id              SERIAL PRIMARY KEY,
+    main_id         INTEGER DEFAULT NULL,
+    sub_id          INTEGER DEFAULT NULL,
+    event_name      VARCHAR(20) NOT NULL,
+    date            TIMESTAMP NOT NULL,
+    created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
+    FOREIGN KEY     (main_id) REFERENCES main_tabs(id) ON DELETE CASCADE,
+    FOREIGN KEY     (sub_id) REFERENCES subtabs(id) ON DELETE CASCADE
 );

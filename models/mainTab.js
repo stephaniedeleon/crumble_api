@@ -34,10 +34,10 @@ class MainTab {
     static async createMaintab({ user, maintab }) {
 
         const requiredFields = ["name"];
-        requiredFields.forEach((field) => {
-        if (!maintab.hasOwnProperty(field) || !maintab[field]) {
-            throw new BadRequestError(`Required field - ${field} - missing from request body.`)
-        }
+            requiredFields.forEach((field) => {
+            if (!maintab.hasOwnProperty(field) || !maintab[field]) {
+                throw new BadRequestError(`Required field - ${field} - missing from request body.`)
+            }
         });
 
         //create a new maintab - store in database
