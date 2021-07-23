@@ -9,7 +9,7 @@ class Calendar {
         const query = `
             SELECT * FROM calendar
             WHERE calendar.main_id = $1
-            ORDER BY created_at DESC;
+            ORDER BY date ASC;
         `
         const result = await db.query(query, [main_id]);
 
@@ -23,7 +23,7 @@ class Calendar {
         const query = `
         SELECT * FROM calendar
         WHERE calendar.sub_id = $1
-        ORDER BY created_at DESC;
+        ORDER BY date ASC;
         `
         const result = await db.query(query, [sub_id]);
 
@@ -90,14 +90,3 @@ class Calendar {
 }
 
 module.exports = Calendar;
-
-// CREATE TABLE calendar (
-//     id              SERIAL PRIMARY KEY,
-//     main_id         INTEGER DEFAULT NULL,
-//     sub_id          INTEGER DEFAULT NULL,
-//     event_name      VARCHAR(20) NOT NULL,
-//     date            TIMESTAMP NOT NULL,
-//     created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
-//     FOREIGN KEY     (main_id) REFERENCES main_tabs(id) ON DELETE CASCADE,
-//     FOREIGN KEY     (sub_id) REFERENCES subtabs(id) ON DELETE CASCADE
-// );
