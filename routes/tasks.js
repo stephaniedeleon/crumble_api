@@ -46,10 +46,11 @@ router.post("/main/create", requireAuthenticatedUser, async (req, res, next) => 
 router.post("/sub/create", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
-        const task = await Subtab.createSubtabFromSub({ sub_id: req.body.sub_id, task: req.body.task });
+        const task = await Task.createTaskFromSub({ sub_id: req.body.sub_id, task: req.body.task });
         res.status(201).json({ task });
 
     } catch(err) {
+        console.log(err);
         next(err);
     }
 });
