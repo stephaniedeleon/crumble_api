@@ -2,6 +2,21 @@ const db = require("../db");
 const { BadRequestError } = require("../utils/errors");
 
 class Subtab {
+
+  /** Fetch subtab by id */
+  static async fetchSubtabById(sub_id) {
+
+      const query = `
+          SELECT * FROM subtabs
+          WHERE subtabs.id = $1;
+      `
+      const result = await db.query(query, [sub_id]);
+
+      //return subtab
+      return result.rows[0];
+  }
+
+
   /** Fetch all subtabs by maintab id */
   static async listSubtabsByMain(main_id) {
     const query = `

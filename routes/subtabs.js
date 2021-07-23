@@ -3,6 +3,25 @@ const { requireAuthenticatedUser } = require("../middleware/security");
 const router = express.Router();
 const Subtab = require("../models/subtab");
 
+
+/** Fetching a subtab by id */
+router.get("/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
+
+    try {
+        // const user = res.locals.user;
+        const sub_id = req.params.subtabId; 
+        const subtab = await Subtab.fetchSubtabById(sub_id);
+        if (!subtab) {
+            throw new NotFoundError("Sub tab not found");
+        }
+        res.status(200).json({ subtab });
+
+    } catch (err) {
+        next(err);
+    }
+
+});
+
 /** Listing subtabs from maintab */
 router.get("/main/:id", requireAuthenticatedUser, async (req, res, next) => {
 
@@ -28,7 +47,7 @@ router.get("/sub/:id", requireAuthenticatedUser, async (req, res, next) => {
     } catch(error) {
         next(error);
     }
-})
+});
 
 /** Creating a new subtab from maintab */
 router.post("/main/create", requireAuthenticatedUser, async (req, res, next) => {
