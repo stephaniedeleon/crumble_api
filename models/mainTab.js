@@ -65,6 +65,20 @@ class MainTab {
         return result.rows;
     }
 
+    /** Updating a maintab name */
+    static async updateMaintab({maintabId, newName, user}) {
+
+            const query = `
+            UPDATE main_tabs
+            SET name = $1, updated_at = NOW()
+            WHERE main_tabs.id = $2 AND main_tabs.user_id = (SELECT id FROM users WHERE email=$3)
+            RETURNING id, user_id, name, created_at, updated_at; 
+        `
+        const result = await db.query(query, [newName, maintabId, user.email]);
+
+        return result.rows;
+    }
+
 }
 
 module.exports = MainTab;
