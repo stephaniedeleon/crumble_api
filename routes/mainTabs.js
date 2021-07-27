@@ -61,5 +61,20 @@ router.delete("/:maintabId", requireAuthenticatedUser, async (req, res, next) =>
     }
 });
 
+/** Updating a maintab */
+router.put("/:maintabId", requireAuthenticatedUser, async (req, res, next) => {
+
+    try {
+        const user = res.locals.user;
+        const maintabId = req.params.maintabId; 
+        const maintab = await MainTab.updateMaintab({maintabId, newName: req.body.name, user});
+        res.status(201).json({ maintab });
+
+    } catch(err) {
+        console.log(err);
+        next(err);
+    }
+});
+
 
 module.exports = router;
