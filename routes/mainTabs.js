@@ -71,7 +71,6 @@ router.put("/:maintabId", requireAuthenticatedUser, async (req, res, next) => {
         res.status(201).json({ maintab });
 
     } catch(err) {
-        console.log(err);
         next(err);
     }
 });
