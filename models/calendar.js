@@ -41,7 +41,7 @@ class Calendar {
             }
         });
 
-        //create a new maintab - store in database
+        //create a new event - store in database
         const query = `
             INSERT INTO calendar (main_id, event_name, date)
             VALUES ($1, $2, $3) 
@@ -63,7 +63,7 @@ class Calendar {
             }
         });
 
-        //create a new maintab - store in database
+        //create a new event - store in database
         const query = `
             INSERT INTO calendar (sub_id, event_name, date)
             VALUES ($1, $2, $3) 
@@ -83,6 +83,20 @@ class Calendar {
             `;
 
         const result = await db.query(query, [event_id]);
+
+        return result.rows;
+    }
+
+    /** Updating an event */
+    static async updateEvent({eventId, updatedEvent}) {
+
+        const query = `
+            UPDATE calendar
+            SET event_name = $1, date = $2, updated_at = NOW()
+            WHERE calendar.id = $3
+            RETURNING *; 
+        `
+        const result = await db.query(query, [updatedEvent.event_name, updatedEvent.date, eventId]);
 
         return result.rows;
     }

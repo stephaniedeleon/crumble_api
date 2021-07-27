@@ -68,4 +68,18 @@ router.delete("/:eventId", requireAuthenticatedUser, async (req, res, next) => {
 });
 
 
+/** Updating an event */
+router.put("/:eventId", requireAuthenticatedUser, async (req, res, next) => {
+
+    try {
+        const eventId = req.params.eventId; 
+        const event = await Calendar.updateEvent({eventId, updatedEvent: req.body});
+        res.status(201).json({ event });
+
+    } catch(err) {
+        next(err);
+    }
+});
+
+
 module.exports = router;
