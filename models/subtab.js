@@ -122,8 +122,8 @@ class Subtab {
   static async markSubtab(id) {
       const query = `
           UPDATE subtabs
-          SET completed = TRUE
-          WHERE id = $1
+          SET completed = TRUE, completed_at = NOW()
+          WHERE id = $1;
       `
 
       const result = await db.query(query, [id]);
@@ -137,7 +137,7 @@ class Subtab {
       const query = `
           UPDATE subtabs
           SET completed = FALSE
-          WHERE id = $1
+          WHERE id = $1;
       `
 
       const result = await db.query(query, [id]);
