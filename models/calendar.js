@@ -90,13 +90,40 @@ class Calendar {
     /** Updating an event */
     static async updateEvent({eventId, updatedEvent}) {
 
-        const query = `
-            UPDATE calendar
-            SET event_name = $1, date = $2, updated_at = NOW()
-            WHERE calendar.id = $3
-            RETURNING *; 
-        `
-        const result = await db.query(query, [updatedEvent.event_name, updatedEvent.date, eventId]);
+        let query;
+        let result;
+
+        if (updatedEvent?.event_name && updatedEvent?.date) { //runs if they edited both
+
+            query = `
+                UPDATE calendar
+                SET event_name = $1, date = $2, updated_at = NOW()
+                WHERE calendar.id = $3
+                RETURNING *; 
+            `
+            result = await db.query(query, [updatedEvent.event_name, updatedEvent.date, eventId]);
+
+        } else if (!updatedEvent?.date) { //if date is empty, it will only update name
+
+            query = `
+                UPDATE calendar
+                SET event_name = $1, updated_at = NOW()
+                WHERE calendar.id = $2
+                RETURNING *; 
+            `
+            result = await db.query(query, [updatedEvent.event_name, eventId]);
+
+        } else if (!updatedEvent?.event_name) { //if name is empty, it will only update date
+
+            query = `
+                UPDATE calendar
+                SET date = $1, updated_at = NOW()
+                WHERE calendar.id = $2
+                RETURNING *; 
+            `
+            result = await db.query(query, [updatedEvent.date, eventId]);
+
+        }
 
         return result.rows;
     }
