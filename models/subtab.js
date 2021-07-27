@@ -95,12 +95,13 @@ class Subtab {
   static async deleteSubtab(id) {
     const query = `
             DELETE FROM subtabs
-            WHERE subtabs.id = $1;
+            WHERE subtabs.id = $1
+            RETURNING *;
         `;
 
     const result = await db.query(query, [id]);
 
-    return result.rows;
+    return result.rows[0];
   }
 
 /** Mark subtab */
