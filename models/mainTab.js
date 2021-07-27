@@ -62,7 +62,7 @@ class MainTab {
         `
         const result = await db.query(query, [maintabId, user.email]);
 
-        return result.rows;
+        return result.rows[0];
     }
 
     /** Updating a maintab name */
@@ -76,7 +76,7 @@ class MainTab {
         `
         const result = await db.query(query, [newName, maintabId, user.email]);
 
-        return result.rows;
+        return result.rows[0];
     }
 
 }

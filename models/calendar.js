@@ -84,7 +84,7 @@ class Calendar {
 
         const result = await db.query(query, [event_id]);
 
-        return result.rows;
+        return result.rows[0];
     }
 
     /** Updating an event */
@@ -125,7 +125,7 @@ class Calendar {
 
         }
 
-        return result.rows;
+        return result.rows[0];
     }
 
 }
