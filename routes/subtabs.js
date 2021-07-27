@@ -86,6 +86,19 @@ router.delete("/:subtabId", requireAuthenticatedUser, async (req, res, next) => 
     }
 });
 
+/** Updating a subtab */
+router.put("/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
+
+    try {
+        const subtabId = req.params.subtabId; 
+        const subtab = await Subtab.updateSubtab({subtabId, newName: req.body.name});
+        res.status(201).json({ subtab });
+
+    } catch(err) {
+        next(err);
+    }
+});
+
 /** Marking a subtab */
 router.put("/mark/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
     
