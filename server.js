@@ -8,7 +8,7 @@ const authRoutes = require("./routes/auth");
 const maintabsRoutes = require("./routes/mainTabs");
 const subtabsRoutes = require("./routes/subtabs");
 const tasksRoutes = require("./routes/tasks");
-// const notesRoutes = require("./routes/notes");
+const notesRoutes = require("./routes/notes");
 const calendarsRoutes = require("./routes/calendars");
 
 const app = express();
@@ -26,7 +26,7 @@ app.use("/auth", authRoutes);
 app.use("/maintabs", maintabsRoutes);
 app.use("/subtabs", subtabsRoutes);
 app.use("/tasks", tasksRoutes);
-// app.use("/notes", notesRoutes);
+app.use("/notes", notesRoutes);
 app.use("/calendar", calendarsRoutes);
 
 
