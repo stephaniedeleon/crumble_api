@@ -92,44 +92,59 @@ class Subtab {
   }
 
   /** Deleting a subtab  */
-  static async deleteSubtab(id) {
+  static async deleteSubtab(subtabId) {
     const query = `
             DELETE FROM subtabs
             WHERE subtabs.id = $1;
         `;
 
-    const result = await db.query(query, [id]);
+    const result = await db.query(query, [subtabId]);
 
-    return result.rows;
+    return result.rows[0];
   }
 
-/** Mark subtab */
-static async markSubtab(id) {
+  /** Updating a subtab name */
+  static async updateSubtab({subtabId, newName}) {
+
     const query = `
         UPDATE subtabs
-        SET completed = TRUE
-        WHERE id = $1
+        SET name = $1, updated_at = NOW()
+        WHERE subtabs.id = $2
+        RETURNING id, main_id, sub_id, name, created_at, updated_at; 
     `
+    const result = await db.query(query, [newName, subtabId]);
 
-    const result = await db.query(query, [id]);
-
-    // return subtab
     return result.rows[0];
-}
+  }
 
-/** Unmark subtab */
-static async unmarkSubtab(id) {
-    const query = `
-        UPDATE subtabs
-        SET completed = FALSE
-        WHERE id = $1
-    `
 
-    const result = await db.query(query, [id]);
+  /** Mark subtab */
+  static async markSubtab(id) {
+      const query = `
+          UPDATE subtabs
+          SET completed = TRUE, completed_at = NOW()
+          WHERE id = $1;
+      `
 
-    // return subtab
-    return result.rows[0];
-}
+      const result = await db.query(query, [id]);
+
+      // return subtab
+      return result.rows[0];
+  }
+
+  /** Unmark subtab */
+  static async unmarkSubtab(id) {
+      const query = `
+          UPDATE subtabs
+          SET completed = FALSE
+          WHERE id = $1;
+      `
+
+      const result = await db.query(query, [id]);
+
+      // return subtab
+      return result.rows[0];
+  }
 
   /** Return object containing directory tree data */
   static async getDirectoryData(maintabId, user) {

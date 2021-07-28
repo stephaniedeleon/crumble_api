@@ -68,6 +68,19 @@ router.delete("/:taskId", requireAuthenticatedUser, async (req, res, next) => {
     }
 });
 
+/** Updating a task */
+router.put("/:taskId", requireAuthenticatedUser, async (req, res, next) => {
+
+    try {
+        const taskId = req.params.taskId; 
+        const task = await Task.updateTask({taskId, newDetails: req.body.details});
+        res.status(201).json({ task });
+
+    } catch(err) {
+        next(err);
+    }
+});
+
 /** Marking a task */
 router.put("/mark/:taskId", requireAuthenticatedUser, async (req, res, next) => {
     
@@ -75,6 +88,7 @@ router.put("/mark/:taskId", requireAuthenticatedUser, async (req, res, next) => 
         const taskId = req.params.taskId;
         const task = await Task.markTask(taskId);
         res.status(201).json({ task });
+
     } catch(err) {
         next(err);
     }

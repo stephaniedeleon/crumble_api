@@ -85,15 +85,29 @@ class Task {
 
         const result = await db.query(query, [id]);
 
-        return result.rows;
+        return result.rows[0];
+    }
+
+    /** Updating task details */
+    static async updateTask({taskId, newDetails}) {
+
+        const query = `
+            UPDATE tasks
+            SET details = $1, updated_at = NOW()
+            WHERE tasks.id = $2
+            RETURNING id, main_id, sub_id, details, created_at, updated_at; 
+        `
+        const result = await db.query(query, [newDetails, taskId]);
+
+        return result.rows[0];
     }
 
     /** Mark task */
     static async markTask(id) {
         const query = `
             UPDATE tasks
-            SET completed = TRUE
-            WHERE id = $1
+            SET completed = TRUE, completed_at = NOW()
+            WHERE id = $1;
         `
 
         const result = await db.query(query, [id]);
@@ -107,7 +121,7 @@ class Task {
         const query = `
             UPDATE tasks
             SET completed = FALSE
-            WHERE id = $1
+            WHERE id = $1;
         `
 
         const result = await db.query(query, [id]);
