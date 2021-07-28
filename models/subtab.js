@@ -100,7 +100,7 @@ class Subtab {
 
     const result = await db.query(query, [subtabId]);
 
-    return result.rows;
+    return result.rows[0];
   }
 
   /** Updating a subtab name */
@@ -114,7 +114,7 @@ class Subtab {
     `
     const result = await db.query(query, [newName, subtabId]);
 
-    return result.rows;
+    return result.rows[0];
   }
 
 

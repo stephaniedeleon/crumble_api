@@ -85,7 +85,21 @@ class Task {
 
         const result = await db.query(query, [id]);
 
-        return result.rows;
+        return result.rows[0];
+    }
+
+    /** Updating task details */
+    static async updateTask({taskId, newDetails}) {
+
+        const query = `
+            UPDATE tasks
+            SET details = $1, updated_at = NOW()
+            WHERE tasks.id = $2
+            RETURNING id, main_id, sub_id, details, created_at, updated_at; 
+        `
+        const result = await db.query(query, [newDetails, taskId]);
+
+        return result.rows[0];
     }
 
     /** Mark task */
