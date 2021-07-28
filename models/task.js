@@ -92,8 +92,8 @@ class Task {
     static async markTask(id) {
         const query = `
             UPDATE tasks
-            SET completed = TRUE
-            WHERE id = $1
+            SET completed = TRUE, completed_at = NOW()
+            WHERE id = $1;
         `
 
         const result = await db.query(query, [id]);
@@ -107,7 +107,7 @@ class Task {
         const query = `
             UPDATE tasks
             SET completed = FALSE
-            WHERE id = $1
+            WHERE id = $1;
         `
 
         const result = await db.query(query, [id]);

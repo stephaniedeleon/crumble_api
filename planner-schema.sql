@@ -26,6 +26,7 @@ CREATE TABLE subtabs (
     completed       BOOLEAN NOT NULL DEFAULT FALSE,
     created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at      TIMESTAMP NOT NULL DEFAULT NOW(),
+    completed_at    TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY     (main_id) REFERENCES main_tabs(id) ON DELETE CASCADE,
     FOREIGN KEY     (sub_id) REFERENCES subtabs(id) ON DELETE CASCADE
 );
@@ -38,6 +39,7 @@ CREATE TABLE tasks (
     completed       BOOLEAN NOT NULL DEFAULT FALSE,
     created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at      TIMESTAMP NOT NULL DEFAULT NOW(),
+    completed_at    TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY     (main_id) REFERENCES main_tabs(id) ON DELETE CASCADE,
     FOREIGN KEY     (sub_id) REFERENCES subtabs(id) ON DELETE CASCADE
 );

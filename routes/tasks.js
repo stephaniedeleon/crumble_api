@@ -75,6 +75,7 @@ router.put("/mark/:taskId", requireAuthenticatedUser, async (req, res, next) => 
         const taskId = req.params.taskId;
         const task = await Task.markTask(taskId);
         res.status(201).json({ task });
+
     } catch(err) {
         next(err);
     }
