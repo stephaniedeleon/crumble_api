@@ -95,7 +95,8 @@ class Subtab {
   static async deleteSubtab(subtabId) {
     const query = `
             DELETE FROM subtabs
-            WHERE subtabs.id = $1;
+            WHERE subtabs.id = $1
+            RETURNING *;
         `;
 
     const result = await db.query(query, [subtabId]);
