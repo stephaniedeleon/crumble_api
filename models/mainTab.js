@@ -62,13 +62,13 @@ class MainTab {
         `
         const result = await db.query(query, [maintabId, user.email]);
 
-        return result.rows;
+        return result.rows[0];
     }
 
     /** Updating a maintab name */
     static async updateMaintab({maintabId, newName, user}) {
 
-            const query = `
+        const query = `
             UPDATE main_tabs
             SET name = $1, updated_at = NOW()
             WHERE main_tabs.id = $2 AND main_tabs.user_id = (SELECT id FROM users WHERE email=$3)
@@ -76,7 +76,7 @@ class MainTab {
         `
         const result = await db.query(query, [newName, maintabId, user.email]);
 
-        return result.rows;
+        return result.rows[0];
     }
 
 }
