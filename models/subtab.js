@@ -147,6 +147,18 @@ class Subtab {
       return result.rows[0];
   }
 
+  /** Deleting completed subtabs  */
+  static async deleteCompletedSubtabs() {
+      const query = `
+              DELETE FROM subtabs
+              WHERE completed = TRUE;
+          `;
+
+      const result = await db.query(query);
+
+      return result.rows[0];
+  }
+
   /** Return object containing directory tree data */
   static async getDirectoryData(maintabId, user) {
     const query = `
