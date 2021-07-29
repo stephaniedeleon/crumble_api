@@ -129,6 +129,18 @@ class Task {
         // return task
         return result.rows[0];
     }
+
+    /** Deleting completed tasks  */
+    static async deleteCompletedTasks() {
+        const query = `
+                DELETE FROM tasks
+                WHERE completed = TRUE;
+            `;
+
+        const result = await db.query(query);
+
+        return result.rows[0];
+    }
 }
 
 module.exports = Task;
