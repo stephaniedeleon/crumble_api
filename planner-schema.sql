@@ -50,7 +50,7 @@ CREATE TABLE notes (
     main_id         INTEGER DEFAULT NULL,
     sub_id          INTEGER DEFAULT NULL,
     title           VARCHAR(20) NOT NULL,
-    details         TEXT NOT NULL,
+    details         JSON NOT NULL,
     created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at      TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY     (main_id) REFERENCES main_tabs(id) ON DELETE CASCADE,
