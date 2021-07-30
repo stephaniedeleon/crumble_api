@@ -100,8 +100,7 @@ class Subtab {
 
         const query = `
             DELETE FROM subtabs
-            WHERE subtabs.id = $1 AND subtabs.user_id = (SELECT id FROM users WHERE email=$2)
-            RETURNING *;
+            WHERE subtabs.id = $1 AND subtabs.user_id = (SELECT id FROM users WHERE email=$2);
         `;
 
         const result = await db.query(query, [subtabId, user.email]);

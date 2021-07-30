@@ -7,8 +7,9 @@ const Task = require("../models/task");
 router.get("/main/:id", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const maintabId = req.params.id;
-        const tasks = await Task.listTasksByMain(maintabId);
+        const tasks = await Task.listTasksByMain(maintabId, user);
         res.status(200).json({ tasks });
 
     } catch (error) {
@@ -21,8 +22,9 @@ router.get("/main/:id", requireAuthenticatedUser, async (req, res, next) => {
 router.get("/sub/:id", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const subtabId = req.params.id;
-        const tasks = await Task.listTasksBySubtab(subtabId);
+        const tasks = await Task.listTasksBySubtab(subtabId, user);
         res.status(200).json({ tasks });
 
     } catch(error) {
@@ -34,7 +36,8 @@ router.get("/sub/:id", requireAuthenticatedUser, async (req, res, next) => {
 router.post("/main/create", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
-        const task = await Task.createTaskFromMain({ main_id: req.body.main_id, task: req.body.task });
+        const user = res.locals.user;
+        const task = await Task.createTaskFromMain({ user, main_id: req.body.main_id, task: req.body.task });
         res.status(201).json({ task });
 
     } catch(err) {
@@ -46,7 +49,8 @@ router.post("/main/create", requireAuthenticatedUser, async (req, res, next) => 
 router.post("/sub/create", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
-        const task = await Task.createTaskFromSub({ sub_id: req.body.sub_id, task: req.body.task });
+        const user = res.locals.user;
+        const task = await Task.createTaskFromSub({ user, sub_id: req.body.sub_id, task: req.body.task });
         res.status(201).json({ task });
 
     } catch(err) {
@@ -58,8 +62,9 @@ router.post("/sub/create", requireAuthenticatedUser, async (req, res, next) => {
 router.delete("/:taskId", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const taskId = req.params.taskId; 
-        const task = await Task.deleteTask(taskId);
+        const task = await Task.deleteTask(taskId, user);
         res.status(201).json({ task });
 
     } catch(err) {
@@ -71,8 +76,9 @@ router.delete("/:taskId", requireAuthenticatedUser, async (req, res, next) => {
 router.put("/:taskId", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const taskId = req.params.taskId; 
-        const task = await Task.updateTask({taskId, newDetails: req.body.details});
+        const task = await Task.updateTask({taskId, newDetails: req.body.details, user});
         res.status(201).json({ task });
 
     } catch(err) {
@@ -84,8 +90,9 @@ router.put("/:taskId", requireAuthenticatedUser, async (req, res, next) => {
 router.put("/mark/:taskId", requireAuthenticatedUser, async (req, res, next) => {
     
     try {
+        const user = res.locals.user;
         const taskId = req.params.taskId;
-        const task = await Task.markTask(taskId);
+        const task = await Task.markTask(taskId, user);
         res.status(201).json({ task });
 
     } catch(err) {
@@ -97,8 +104,9 @@ router.put("/mark/:taskId", requireAuthenticatedUser, async (req, res, next) => 
 router.put("/unmark/:taskId", requireAuthenticatedUser, async (req, res, next) => {
     
     try {
+        const user = res.locals.user;
         const taskId = req.params.taskId;
-        const task = await Task.unmarkTask(taskId);
+        const task = await Task.unmarkTask(taskId, user);
         res.status(201).json({ task });
 
     } catch(err) {
