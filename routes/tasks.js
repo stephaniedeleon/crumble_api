@@ -41,6 +41,7 @@ router.post("/main/create", requireAuthenticatedUser, async (req, res, next) => 
         res.status(201).json({ task });
 
     } catch(err) {
+        console.log(err);
         next(err);
     }
 });
@@ -78,7 +79,7 @@ router.put("/:taskId", requireAuthenticatedUser, async (req, res, next) => {
     try {
         const user = res.locals.user;
         const taskId = req.params.taskId; 
-        const task = await Task.updateTask({taskId, newDetails: req.body.details, user});
+        const task = await Task.updateTask({taskId, updatedTask: req.body.task, user});
         res.status(201).json({ task });
 
     } catch(err) {
