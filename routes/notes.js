@@ -73,4 +73,18 @@ router.delete("/:noteId", requireAuthenticatedUser, async (req, res, next) => {
     }
 })
 
+/** Updating a note */
+router.put("/:noteId", requireAuthenticatedUser, async (req, res, next) => {
+
+    try {
+        const user = res.locals.user;
+        const noteId = req.params.noteId;
+        const note = await Note.updateNote({noteId, newTitle: req.body.title, newDetails: req.body.details, user});
+        res.status(201).json({ note });
+
+    } catch(err) {
+        next(err);
+    }
+})
+
 module.exports = router;

@@ -92,6 +92,21 @@ class Note {
 
         return result.rows;
     }
+
+    /** Update a note */
+    static async updateNote({ noteId, newTitle, newDetails, user }) {
+
+        const query = `
+            UPDATE notes
+            SET title = $1, details = $2, updated_at = NOW()
+            WHERE notes.id = $3 AND notes.user_id = (SELECT id FROM users WHERE email=$4)
+            RETURNING id, user_id, main_id, sub_id, title, details, created_at, updated_at;
+        `
+        const result = await db.query(query, [newTitle, newDetails, noteId, user.email]);
+
+        return result.rows[0];
+        
+    }
 }
 
 module.exports = Note;
