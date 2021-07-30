@@ -174,13 +174,13 @@ class Subtab {
           `;
       const result = await db.query(query, [maintabId, user.email]);
       const maintab = result.rows[0];
-      const primarySubtabs = await this.listSubtabsByMain(maintabId);
+      const primarySubtabs = await this.listSubtabsByMain(maintabId, user);
 
       const children = await Promise.all(
         primarySubtabs.map(async (element) =>
           this.createTreeNode({
             tabObject: element,
-            children: await this.getChildren(element.id),
+            children: await this.getChildren(element.id, user),
           })
         )
       );
@@ -194,8 +194,8 @@ class Subtab {
     }
 
     // Recursivaly returns an array of all children subtabs associated to the subtabId
-    static async getChildren(subtabId) {
-      const subtabs = await this.listSubtabsBySubtab(subtabId);
+    static async getChildren(subtabId, user) {
+      const subtabs = await this.listSubtabsBySubtab(subtabId, user);
       if (!subtabs.length) {
         return [];
       }
@@ -204,7 +204,7 @@ class Subtab {
         subtabs.map(async (element) =>
           this.createTreeNode({
             tabObject: element,
-            children: await this.getChildren(element.id),
+            children: await this.getChildren(element.id, user),
           })
         )
       );

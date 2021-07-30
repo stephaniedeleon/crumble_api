@@ -16,8 +16,6 @@ router.get("/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
         }
         res.status(200).json({ subtab });
 
-        console.log({subtab});
-
     } catch (err) {
         next(err);
     }
@@ -60,8 +58,6 @@ router.post("/main/create", requireAuthenticatedUser, async (req, res, next) => 
         const subtab = await Subtab.createSubtabFromMain({ user, main_id: req.body.main_id, subtab: req.body.subtab });
         res.status(201).json({ subtab });
 
-        console.log({subtab});
-
     } catch(err) {
         next(err);
     }
@@ -90,7 +86,6 @@ router.delete("/:subtabId", requireAuthenticatedUser, async (req, res, next) => 
         res.status(201).json({ subtab });
 
     } catch(err) {
-        console.log(err);
         next(err);
     }
 });

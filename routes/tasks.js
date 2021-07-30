@@ -50,7 +50,6 @@ router.post("/sub/create", requireAuthenticatedUser, async (req, res, next) => {
         res.status(201).json({ task });
 
     } catch(err) {
-        console.log(err);
         next(err);
     }
 });
