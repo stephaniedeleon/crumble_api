@@ -7,8 +7,9 @@ const Calendar = require("../models/calendar");
 router.get("/main/:maintabId", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const main_id = req.params.maintabId; 
-        const events = await Calendar.listEventsForMaintab(main_id);
+        const events = await Calendar.listEventsForMaintab(main_id, user);
         res.status(200).json({ events });
 
     } catch (error) {
@@ -20,8 +21,9 @@ router.get("/main/:maintabId", requireAuthenticatedUser, async (req, res, next) 
 router.get("/sub/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const sub_id = req.params.subtabId;
-        const events = await Calendar.listEventsForSubtab(sub_id);
+        const events = await Calendar.listEventsForSubtab(sub_id, user);
         res.status(200).json({ events });
 
     } catch (error) {
@@ -33,7 +35,8 @@ router.get("/sub/:subtabId", requireAuthenticatedUser, async (req, res, next) =>
 router.post("/main/create", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
-        const event = await Calendar.createEventForMaintab({ main_id: req.body.main_id, event: req.body.event });
+        const user = res.locals.user;
+        const event = await Calendar.createEventForMaintab({ user, main_id: req.body.main_id, event: req.body.event });
         res.status(201).json({ event });
 
     } catch(err) {
@@ -45,7 +48,8 @@ router.post("/main/create", requireAuthenticatedUser, async (req, res, next) => 
 router.post("/sub/create", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
-        const event = await Calendar.createEventForSubtab({ sub_id: req.body.sub_id, event: req.body.event });
+        const user = res.locals.user;
+        const event = await Calendar.createEventForSubtab({ user, sub_id: req.body.sub_id, event: req.body.event });
         res.status(201).json({ event });
 
     } catch(err) {
@@ -58,8 +62,9 @@ router.post("/sub/create", requireAuthenticatedUser, async (req, res, next) => {
 router.delete("/:eventId", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const event_id = req.params.eventId;
-        const event = await Calendar.deleteEvent(event_id);
+        const event = await Calendar.deleteEvent(event_id, user);
         res.status(201).json({ event });
 
     } catch(err) {
@@ -72,8 +77,9 @@ router.delete("/:eventId", requireAuthenticatedUser, async (req, res, next) => {
 router.put("/:eventId", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const eventId = req.params.eventId; 
-        const event = await Calendar.updateEvent({eventId, updatedEvent: req.body});
+        const event = await Calendar.updateEvent({eventId, updatedEvent: req.body, user});
         res.status(201).json({ event });
 
     } catch(err) {
