@@ -3,18 +3,6 @@ const { requireAuthenticatedUser } = require("../middleware/security");
 const router = express.Router();
 const MainTab = require("../models/mainTab");
 
-/** Listing maintabs */
-router.get("/", requireAuthenticatedUser, async (req, res, next) => {
-
-    try {
-        const user = res.locals.user;
-        const maintabs = await MainTab.listMaintabsForUser(user);
-        res.status(200).json({ maintabs });
-
-    } catch (error) {
-        next(error);
-    }
-});
 
 /** Fetching a maintab by id */
 router.get("/:maintabId", requireAuthenticatedUser, async (req, res, next) => {
@@ -32,6 +20,19 @@ router.get("/:maintabId", requireAuthenticatedUser, async (req, res, next) => {
         next(err);
     }
 
+});
+
+/** Listing maintabs */
+router.get("/", requireAuthenticatedUser, async (req, res, next) => {
+
+    try {
+        const user = res.locals.user;
+        const maintabs = await MainTab.listMaintabsForUser(user);
+        res.status(200).json({ maintabs });
+
+    } catch (error) {
+        next(error);
+    }
 });
 
 /** Creating a new maintab */

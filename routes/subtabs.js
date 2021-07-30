@@ -8,9 +8,9 @@ const Subtab = require("../models/subtab");
 router.get("/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
-        // const user = res.locals.user;
+        const user = res.locals.user;
         const sub_id = req.params.subtabId; 
-        const subtab = await Subtab.fetchSubtabById(sub_id);
+        const subtab = await Subtab.fetchSubtabById(sub_id, user);
         if (!subtab) {
             throw new NotFoundError("Sub tab not found");
         }
@@ -26,8 +26,9 @@ router.get("/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
 router.get("/main/:id", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const maintabId = req.params.id;
-        const subtabs = await Subtab.listSubtabsByMain(maintabId);
+        const subtabs = await Subtab.listSubtabsByMain(maintabId, user);
         res.status(200).json({ subtabs });
 
     } catch (error) {
@@ -35,13 +36,13 @@ router.get("/main/:id", requireAuthenticatedUser, async (req, res, next) => {
     }
 });
 
-
 /** Listing subtabs from subtab */
 router.get("/sub/:id", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const subtabId = req.params.id;
-        const subtabs = await Subtab.listSubtabsBySubtab(subtabId);
+        const subtabs = await Subtab.listSubtabsBySubtab(subtabId, user);
         res.status(200).json({ subtabs });
 
     } catch(error) {
@@ -53,7 +54,8 @@ router.get("/sub/:id", requireAuthenticatedUser, async (req, res, next) => {
 router.post("/main/create", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
-        const subtab = await Subtab.createSubtabFromMain({ main_id: req.body.main_id, subtab: req.body.subtab });
+        const user = res.locals.user;
+        const subtab = await Subtab.createSubtabFromMain({ user, main_id: req.body.main_id, subtab: req.body.subtab });
         res.status(201).json({ subtab });
 
     } catch(err) {
@@ -65,7 +67,8 @@ router.post("/main/create", requireAuthenticatedUser, async (req, res, next) => 
 router.post("/sub/create", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
-        const subtab = await Subtab.createSubtabFromSub({ sub_id: req.body.sub_id, subtab: req.body.subtab });
+        const user = res.locals.user;
+        const subtab = await Subtab.createSubtabFromSub({ user, sub_id: req.body.sub_id, subtab: req.body.subtab });
         res.status(201).json({ subtab });
 
     } catch(err) {
@@ -77,8 +80,9 @@ router.post("/sub/create", requireAuthenticatedUser, async (req, res, next) => {
 router.delete("/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const subtabId = req.params.subtabId; 
-        const subtab = await Subtab.deleteSubtab(subtabId);
+        const subtab = await Subtab.deleteSubtab(subtabId, user);
         res.status(201).json({ subtab });
 
     } catch(err) {
@@ -90,8 +94,9 @@ router.delete("/:subtabId", requireAuthenticatedUser, async (req, res, next) => 
 router.put("/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
 
     try {
+        const user = res.locals.user;
         const subtabId = req.params.subtabId; 
-        const subtab = await Subtab.updateSubtab({subtabId, newName: req.body.name});
+        const subtab = await Subtab.updateSubtab({subtabId, newName: req.body.name, user});
         res.status(201).json({ subtab });
 
     } catch(err) {
@@ -103,8 +108,9 @@ router.put("/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
 router.put("/mark/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
     
     try {
+        const user = res.locals.user;
         const subtabId = req.params.subtabId;
-        const subtab = await Subtab.markSubtab(subtabId);
+        const subtab = await Subtab.markSubtab(subtabId, user);
         res.status(201).json({ subtab });
 
     } catch(err) {
@@ -116,8 +122,9 @@ router.put("/mark/:subtabId", requireAuthenticatedUser, async (req, res, next) =
 router.put("/unmark/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
     
     try {
+        const user = res.locals.user;
         const subtabId = req.params.subtabId;
-        const subtab = await Subtab.unmarkSubtab(subtabId);
+        const subtab = await Subtab.unmarkSubtab(subtabId, user);
         res.status(201).json({ subtab });
 
     } catch(err) {
