@@ -79,6 +79,37 @@ class User {
 
     }
 
+    static async update(credentials) {
+        const requiredFields = ['email', 'firstName', 'lastName'];
+        requiredFields.forEach((field) => {
+            if (!credentials?.hasOwnProperty(field)) {
+                throw new BadRequestError(`Missing ${field} in request body.`);
+            }
+        })
+
+        console.log(credentials);
+
+        const existingUser = await User.fetchUserByEmail(credentials.email);
+        if (existingUser) {
+            throw new BadRequestError(`A user already exists with email: ${credentials.email}`);
+        }
+
+        const normalizedEmail = credentials.email.toLowerCase();
+
+        const query = `
+            UPDATE users
+            SET email = $1, first_name = $2, last_name = $3, updated_at = NOW()
+            WHERE users.id = $4
+            RETURNING id, email, first_name, last_name, created_at, updated_at;
+        `
+
+        const result = await db.query(query, [normalizedEmail, credentials.firstName, credentials.lastName, credentials.user.id])
+
+        const user = result.rows[0];
+
+        return User.makePublicUser(user);
+    }
+
     static async fetchUserByEmail(email) {
         if (!email) {
             throw new BadRequestError('No email provided');
