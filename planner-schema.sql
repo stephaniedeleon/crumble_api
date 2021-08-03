@@ -24,8 +24,8 @@ CREATE TABLE subtabs (
     main_id         INTEGER DEFAULT NULL,
     sub_id          INTEGER DEFAULT NULL,
     name            VARCHAR(30) NOT NULL,
-    priority        VARCHAR(10) DEFAULT NULL,
-    date            TIMESTAMP DEFAULT NULL,
+    -- priority        VARCHAR(10) DEFAULT NULL,
+    -- date            TIMESTAMP DEFAULT NULL,
     completed       BOOLEAN NOT NULL DEFAULT FALSE,
     created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at      TIMESTAMP NOT NULL DEFAULT NOW(),
@@ -72,13 +72,15 @@ CREATE TABLE calendar (
     user_id         INTEGER NOT NULL,
     main_id         INTEGER DEFAULT NULL,
     sub_id          INTEGER DEFAULT NULL,
+    task_id         INTEGER DEFAULT NULL,
     event_name      VARCHAR(20) NOT NULL,
-    priority        VARCHAR(10) DEFAULT NULL,
+    -- priority        VARCHAR(10) DEFAULT NULL,
     notes           TEXT DEFAULT NULL,
     date            TIMESTAMP NOT NULL,
     created_at      TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at      TIMESTAMP NOT NULL DEFAULT NOW(),
     FOREIGN KEY     (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY     (main_id) REFERENCES main_tabs(id) ON DELETE CASCADE,
-    FOREIGN KEY     (sub_id) REFERENCES subtabs(id) ON DELETE CASCADE
+    FOREIGN KEY     (sub_id) REFERENCES subtabs(id) ON DELETE CASCADE,
+    FOREIGN KEY     (task_id) REFERENCES tasks(id) ON DELETE CASCADE
 );
