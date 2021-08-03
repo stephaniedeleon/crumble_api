@@ -41,13 +41,28 @@ class Calendar {
             }
         });
 
-        //create a new event - store in database
-        const query = `
-            INSERT INTO calendar (user_id, main_id, event_name, date)
-            VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4) 
-            RETURNING *;            
-        `
-        const result = await db.query(query, [user.email, main_id, event.event_name, event.date]);
+        let query;
+        let result;
+
+        if (event?.task_id) {
+            //create a new event based on task - store in database
+            query = `
+                INSERT INTO calendar (user_id, main_id, task_id, event_name, date)
+                VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4, $5) 
+                RETURNING *;            
+            `
+            result = await db.query(query, [user.email, main_id, event.task_id, event.event_name, event.date]);                    
+
+        } else {
+            //create a new event - store in database
+            query = `
+                INSERT INTO calendar (user_id, main_id, event_name, date)
+                VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4) 
+                RETURNING *;            
+            `
+            result = await db.query(query, [user.email, main_id, event.event_name, event.date]);
+        }
+
 
         //return new event
         return result.rows[0];
@@ -63,13 +78,28 @@ class Calendar {
             }
         });
 
-        //create a new event - store in database
-        const query = `
-            INSERT INTO calendar (user_id, sub_id, event_name, date)
-            VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4) 
-            RETURNING *;            
-        `
-        const result = await db.query(query, [user.email, sub_id, event.event_name, event.date]);
+        let query;
+        let result;
+
+        if (event?.task_id) {
+            //create a new event based on task - store in database
+            query = `
+                INSERT INTO calendar (user_id, sub_id, task_id, event_name, date)
+                VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4, $5) 
+                RETURNING *;            
+            `
+            result = await db.query(query, [user.email, sub_id, event.task_id, event.event_name, event.date]);                    
+
+        } else {
+            //create a new event - store in database
+            query = `
+                INSERT INTO calendar (user_id, sub_id, event_name, date)
+                VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4) 
+                RETURNING *;            
+            `
+            result = await db.query(query, [user.email, sub_id, event.event_name, event.date]);
+        }
+
 
         //return new event
         return result.rows[0];
