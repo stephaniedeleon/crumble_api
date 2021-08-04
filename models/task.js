@@ -99,7 +99,18 @@ class Task {
         let query;
         let result;
 
-        if (!updatedTask?.details) { //if name is empty, it will only update the others
+        if (!updatedTask?.priority) { //if priority is not empty, it will only update the others
+        
+            query = `
+                UPDATE tasks
+                SET details = $1, date = $2, updated_at = NOW()
+                WHERE tasks.id = $3 AND tasks.user_id = (SELECT id FROM users WHERE email=$4)
+                RETURNING id, user_id, main_id, sub_id, details, priority, date, created_at, updated_at; 
+            `
+
+            result = await db.query(query, [updatedTask.details, updatedTask.date, taskId, user.email]);
+        
+        } else if (!updatedTask?.details) { //if name is empty, it will only update the others
 
             query = `
                 UPDATE tasks

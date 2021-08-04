@@ -41,13 +41,28 @@ class Calendar {
             }
         });
 
-        //create a new event - store in database
-        const query = `
-            INSERT INTO calendar (user_id, main_id, event_name, date)
-            VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4) 
-            RETURNING *;            
-        `
-        const result = await db.query(query, [user.email, main_id, event.event_name, event.date]);
+        let query;
+        let result;
+
+        if (event?.task_id) {
+            //create a new event based on task - store in database
+            query = `
+                INSERT INTO calendar (user_id, main_id, task_id, event_name, date, notes)
+                VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4, $5, $6) 
+                RETURNING *;            
+            `
+            result = await db.query(query, [user.email, main_id, event.task_id, event.event_name, event.date, event.notes]);                    
+
+        } else {
+            //create a new event - store in database
+            query = `
+                INSERT INTO calendar (user_id, main_id, event_name, date, notes)
+                VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4, $5) 
+                RETURNING *;            
+            `
+            result = await db.query(query, [user.email, main_id, event.event_name, event.date, event.notes]);
+        }
+
 
         //return new event
         return result.rows[0];
@@ -63,13 +78,28 @@ class Calendar {
             }
         });
 
-        //create a new event - store in database
-        const query = `
-            INSERT INTO calendar (user_id, sub_id, event_name, date)
-            VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4) 
-            RETURNING *;            
-        `
-        const result = await db.query(query, [user.email, sub_id, event.event_name, event.date]);
+        let query;
+        let result;
+
+        if (event?.task_id) {
+            //create a new event based on task - store in database
+            query = `
+                INSERT INTO calendar (user_id, sub_id, task_id, event_name, date, notes)
+                VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4, $5, $6) 
+                RETURNING *;            
+            `
+            result = await db.query(query, [user.email, sub_id, event.task_id, event.event_name, event.date, event.notes]);                    
+
+        } else {
+            //create a new event - store in database
+            query = `
+                INSERT INTO calendar (user_id, sub_id, event_name, date, notes)
+                VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4, $5) 
+                RETURNING *; 
+            `
+            result = await db.query(query, [user.email, sub_id, event.event_name, event.date, event.notes]);
+        }
+
 
         //return new event
         return result.rows[0];
@@ -97,31 +127,31 @@ class Calendar {
 
             query = `
                 UPDATE calendar
-                SET event_name = $1, date = $2, updated_at = NOW()
-                WHERE calendar.id = $3 AND calendar.user_id = (SELECT id FROM users WHERE email=$4)
+                SET event_name = $1, date = $2, notes = $3, updated_at = NOW()
+                WHERE calendar.id = $4 AND calendar.user_id = (SELECT id FROM users WHERE email=$5)
                 RETURNING *; 
             `
-            result = await db.query(query, [updatedEvent.event_name, updatedEvent.date, eventId, user.email]);
+            result = await db.query(query, [updatedEvent.event_name, updatedEvent.date, updatedEvent.notes, eventId, user.email]);
 
         } else if (!updatedEvent?.date) { //if date is empty, it will only update name
 
             query = `
                 UPDATE calendar
-                SET event_name = $1, updated_at = NOW()
-                WHERE calendar.id = $2 AND calendar.user_id = (SELECT id FROM users WHERE email=$3)
+                SET event_name = $1, notes = $2, updated_at = NOW()
+                WHERE calendar.id = $3 AND calendar.user_id = (SELECT id FROM users WHERE email=$4)
                 RETURNING *; 
             `
-            result = await db.query(query, [updatedEvent.event_name, eventId, user.email]);
+            result = await db.query(query, [updatedEvent.event_name, updatedEvent.notes, eventId, user.email]);
 
         } else if (!updatedEvent?.event_name) { //if name is empty, it will only update date
 
             query = `
                 UPDATE calendar
-                SET date = $1, updated_at = NOW()
-                WHERE calendar.id = $2 AND calendar.user_id = (SELECT id FROM users WHERE email=$3)
+                SET date = $1, notes = $2, updated_at = NOW()
+                WHERE calendar.id = $3 AND calendar.user_id = (SELECT id FROM users WHERE email=$4)
                 RETURNING *; 
             `
-            result = await db.query(query, [updatedEvent.date, eventId, user.email]);
+            result = await db.query(query, [updatedEvent.date, updatedEvent.notes, eventId, user.email]);
 
         }
 
