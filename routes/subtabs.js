@@ -96,7 +96,7 @@ router.put("/:subtabId", requireAuthenticatedUser, async (req, res, next) => {
     try {
         const user = res.locals.user;
         const subtabId = req.params.subtabId; 
-        const subtab = await Subtab.updateSubtab({subtabId, newName: req.body.name, user});
+        const subtab = await Subtab.updateSubtab({subtabId, updatedSubtab: req.body.subtab, user});
         res.status(201).json({ subtab });
 
     } catch(err) {
