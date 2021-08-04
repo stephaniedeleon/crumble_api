@@ -109,7 +109,7 @@ class Subtab {
     }
 
     /** Updating a subtab name */
-    static async updateSubtab({subtabId, newName, user}) {
+    static async updateSubtab({subtabId, updatedSubtab, user}) {
 
         const query = `
             UPDATE subtabs
@@ -117,7 +117,7 @@ class Subtab {
             WHERE subtabs.id = $2 AND subtabs.user_id = (SELECT id FROM users WHERE email=$3)
             RETURNING id, user_id, main_id, sub_id, name, created_at, updated_at; 
         `
-        const result = await db.query(query, [newName, subtabId, user.email]);
+        const result = await db.query(query, [updatedSubtab.name, subtabId, user.email]);
 
         return result.rows[0];
     }
