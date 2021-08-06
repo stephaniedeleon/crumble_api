@@ -62,7 +62,7 @@ class Subtab {
         const query = `
             INSERT INTO subtabs (user_id, main_id, name, priority)
             VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4)
-            RETURNING id, user_id, main_id, name, priority, completed, created_at;
+            RETURNING *;
         `;
 
         const result = await db.query(query, [user.email, main_id, subtab.name, subtab.priority]);
@@ -86,7 +86,7 @@ class Subtab {
         const query = `
             INSERT INTO subtabs (user_id, sub_id, name, priority)
             VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4)
-            RETURNING id, user_id, sub_id, name, priority, completed, created_at;
+            RETURNING *;
         `;
 
         const result = await db.query(query, [user.email, sub_id, subtab.name, subtab.priority]);
@@ -120,7 +120,7 @@ class Subtab {
                 UPDATE subtabs
                 SET name = $1, updated_at = NOW()
                 WHERE subtabs.id = $2 AND subtabs.user_id = (SELECT id FROM users WHERE email=$3)
-                RETURNING id, user_id, main_id, sub_id, name, priority, created_at, updated_at; 
+                RETURNING *; 
             `
 
             result = await db.query(query, [updatedSubtab.name, subtabId, user.email]);
@@ -131,7 +131,7 @@ class Subtab {
               UPDATE subtabs
               SET name = $1, priority =$2, updated_at = NOW()
               WHERE subtabs.id = $3 AND subtabs.user_id = (SELECT id FROM users WHERE email=$4)
-              RETURNING id, user_id, main_id, sub_id, name, priority, created_at, updated_at; 
+              RETURNING *; 
           `
 
           result = await db.query(query, [updatedSubtab.name, updatedSubtab.priority, subtabId, user.email]);
@@ -147,7 +147,8 @@ class Subtab {
         const query = `
             UPDATE subtabs
             SET completed = TRUE, completed_at = NOW()
-            WHERE subtabs.id = $1 AND subtabs.user_id = (SELECT id FROM users WHERE email=$2);
+            WHERE subtabs.id = $1 AND subtabs.user_id = (SELECT id FROM users WHERE email=$2)
+            RETURNING *;
         `
 
         const result = await db.query(query, [subtabId, user.email]);
@@ -161,7 +162,8 @@ class Subtab {
         const query = `
             UPDATE subtabs
             SET completed = FALSE
-            WHERE subtabs.id = $1 AND subtabs.user_id = (SELECT id FROM users WHERE email=$2);
+            WHERE subtabs.id = $1 AND subtabs.user_id = (SELECT id FROM users WHERE email=$2)
+            RETURNING *;
         `
 
         const result = await db.query(query, [maintabId, user.email]);
