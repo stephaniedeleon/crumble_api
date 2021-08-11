@@ -24,6 +24,15 @@ router.post('/register', async (request, response, next) => {
     }
 })
 
+router.put('/update', security.requireAuthenticatedUser, async (request, response, next) => {
+    try {
+        const user = await User.update(request.body);
+        return response.status(201).json({ user })
+    } catch(error) {
+        next(error);
+    }
+})
+
 router.get('/me', security.requireAuthenticatedUser, async (request, response, next) => {
     try {
         const { email } = response.locals.user;

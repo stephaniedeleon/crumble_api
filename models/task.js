@@ -48,7 +48,7 @@ class Task {
         const query = `
             INSERT INTO tasks (user_id, main_id, details, priority, date)
             VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4, $5)
-            RETURNING id, user_id, main_id, details, priority, date, completed, created_at;
+            RETURNING *;
         `;
 
         const result = await db.query(query, [user.email, main_id, task.details, task.priority, task.date]);
@@ -72,7 +72,7 @@ class Task {
         const query = `
             INSERT INTO tasks (user_id, sub_id, details, priority, date)
             VALUES ((SELECT id FROM users WHERE email=$1), $2, $3, $4, $5)
-            RETURNING id, user_id, sub_id, details, priority, date, completed, created_at;
+            RETURNING *;
         `;
 
         const result = await db.query(query, [user.email, sub_id, task.details, task.priority, task.date]);
@@ -105,7 +105,7 @@ class Task {
                 UPDATE tasks
                 SET details = $1, date = $2, updated_at = NOW()
                 WHERE tasks.id = $3 AND tasks.user_id = (SELECT id FROM users WHERE email=$4)
-                RETURNING id, user_id, main_id, sub_id, details, priority, date, created_at, updated_at; 
+                RETURNING *; 
             `
 
             result = await db.query(query, [updatedTask.details, updatedTask.date, taskId, user.email]);
@@ -116,7 +116,7 @@ class Task {
                 UPDATE tasks
                 SET priority = $1, date = $2, updated_at = NOW()
                 WHERE tasks.id = $3 AND tasks.user_id = (SELECT id FROM users WHERE email=$4)
-                RETURNING id, user_id, main_id, sub_id, details, priority, date, created_at, updated_at; 
+                RETURNING *; 
             `
             result = await db.query(query, [updatedTask.priority, updatedTask.date, taskId, user.email]);
 
@@ -126,7 +126,7 @@ class Task {
                 UPDATE tasks
                 SET details = $1, priority = $2, date = $3, updated_at = NOW()
                 WHERE tasks.id = $4 AND tasks.user_id = (SELECT id FROM users WHERE email=$5)
-                RETURNING id, user_id, main_id, sub_id, details, priority, date, created_at, updated_at; 
+                RETURNING *; 
             `
 
             result = await db.query(query, [updatedTask.details, updatedTask.priority, updatedTask.date, taskId, user.email]);
@@ -140,7 +140,8 @@ class Task {
         const query = `
             UPDATE tasks
             SET completed = TRUE, completed_at = NOW()
-            WHERE tasks.id = $1 AND tasks.user_id = (SELECT id FROM users WHERE email=$2);
+            WHERE tasks.id = $1 AND tasks.user_id = (SELECT id FROM users WHERE email=$2)
+            RETURNING *;
         `
 
         const result = await db.query(query, [taskId, user.email]);
@@ -154,7 +155,8 @@ class Task {
         const query = `
             UPDATE tasks
             SET completed = FALSE
-            WHERE tasks.id = $1 AND tasks.user_id = (SELECT id FROM users WHERE email=$2);
+            WHERE tasks.id = $1 AND tasks.user_id = (SELECT id FROM users WHERE email=$2)
+            RETURNING *;
         `
 
         const result = await db.query(query, [taskId, user.email]);
